@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 public class TaskManager {
     private static Integer count = 0;//Поле для передачи значения уникального модификатора
+    private HashMap<Integer, Object> taskMap = new HashMap<>();// HashMap для хранения всех видов задач
     private HashMap<Integer, Task> allTasks = new HashMap<>();//HashMap для tasks.Task
     private HashMap<Integer, Subtask> allSubtasks = new HashMap<>();//HashMap для tasks.Subtask
     private HashMap<Integer, Epic> allEpics = new HashMap<>();//HashMap для tasks.Epic
@@ -20,10 +21,12 @@ public class TaskManager {
         TaskManager.count++;
     }
 
-    public void getAllTasks() {//Вывод всех задач
-        System.out.println(allTasks);
-        System.out.println(allSubtasks);
-        System.out.println(allEpics);
+    public Object getAllTasks() {//Вывод всех задач
+        taskMap.put(0, allTasks);
+        taskMap.put(1, allEpics);
+        taskMap.put(2, allSubtasks);
+
+        return taskMap;
 
     }
 
