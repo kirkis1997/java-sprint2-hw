@@ -1,7 +1,10 @@
 package tasks;
+
 import taskmanager.TaskManager;
 
-public class Task extends TaskManager {//extends taskmanager.TaskManager
+import java.util.Objects;
+
+public class Task {
     protected String Title;
     protected String description;
     protected String status;
@@ -11,8 +14,8 @@ public class Task extends TaskManager {//extends taskmanager.TaskManager
         this.Title = Title;
         this.description = description;
         this.status = "NEW";
-        this.uniqueId = getCount();
-        setCount();
+        this.uniqueId = TaskManager.getCount();
+        TaskManager.setCount();
     }
 
     public Integer getUniqueId() {
@@ -31,5 +34,19 @@ public class Task extends TaskManager {//extends taskmanager.TaskManager
     public String toString() {
         return "{Тип задачи: tasks.Task" + ", Название задачи: '" + Title + "', Описание задачи: '" + description
                 + "', Идентификатор задачи: " + this.uniqueId + ", Статус задачи: '" + status + "'\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Title.equals(task.Title) && description.equals(task.description) && status.equals(task.status)
+                && uniqueId.equals(task.uniqueId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Title, description, status, uniqueId);
     }
 }

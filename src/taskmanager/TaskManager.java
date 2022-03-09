@@ -20,7 +20,7 @@ public class TaskManager {
         TaskManager.count++;
     }
 
-    public void printAllTasks() {//Вывод всех задач
+    public void getAllTasks() {//Вывод всех задач
         System.out.println(allTasks);
         System.out.println(allSubtasks);
         System.out.println(allEpics);
@@ -61,7 +61,7 @@ public class TaskManager {
         if (status.equals("NEW") || status.equals("IN_PROGRESS") || status.equals("DONE")) {
             allTasks.put(id, task);
             task.setStatus(status);
-        } else System.out.println("Ошибка! недопустимый статус задачи");
+        }
     }
 
     public void updateTask(Integer id, Subtask subtask, String status) {//Обновление подзадач
@@ -70,7 +70,7 @@ public class TaskManager {
             subtask.setStatus(status);
             allEpics.get(subtask.getEpicId()).setEpicStatus();//Получаем объект tasks.Epic с обновленным статусом
             allEpics.put(subtask.getEpicId(), allEpics.get(subtask.getEpicId()));//Помещаем этот объект в allEpics
-        } else System.out.println("Ошибка! недопустимый статус задачи");
+        }
     }
 
 

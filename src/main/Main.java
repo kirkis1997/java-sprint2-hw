@@ -36,7 +36,7 @@ public class Main {
         manager.createNewTask(subtask4);
         epic1.setSubtasks(subtask4);
 
-        manager.printAllTasks();
+        manager.getAllTasks();
 
     }
 }
