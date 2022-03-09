@@ -32,6 +32,9 @@ public class TaskManager {
 
     public void removeAllTasks() {//Очистка спика задач
         allTasks.clear();
+        allEpics.clear();
+        allSubtasks.clear();
+        taskMap.clear();
         count = 0;
     }
 
