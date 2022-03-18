@@ -1,32 +1,32 @@
 package tasks;
 
-import taskmanager.TaskManager;
-
+import manager.InMemoryTaskManager;
+import manager.Status;
 import java.util.Objects;
 
 public class Task {
     protected String Title;
     protected String description;
-    protected String status;
+    protected Status status;
     protected Integer uniqueId;
 
     public Task(String Title, String description) {
         this.Title = Title;
         this.description = description;
-        this.status = "NEW";
-        this.uniqueId = TaskManager.getCount();
-        TaskManager.setCount();
+        this.status = Status.NEW;
+        this.uniqueId = InMemoryTaskManager.getCount();
+        InMemoryTaskManager.setCount();
     }
 
     public Integer getUniqueId() {
         return uniqueId;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

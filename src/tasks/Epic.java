@@ -1,16 +1,18 @@
 package tasks;
 
+import manager.Status;
+
 import java.util.HashMap;
 
 public class Epic extends Task {
-    private static HashMap<Integer, Subtask> subtasks;
+    private HashMap<Integer, Subtask> subtasks;//Уникальный список подзадач каждого эпика
 
     public Epic(String Title, String description) {
         super(Title, description);
         this.subtasks = new HashMap<>();
     }
 
-    public static HashMap<Integer, Subtask> getSubtasks() {
+    public HashMap<Integer, Subtask> getSubtasks() {
         return subtasks;
     }
 
@@ -23,20 +25,20 @@ public class Epic extends Task {
         int doneCount = 0;
         for (Subtask subtask : subtasks.values()) {
 
-            if (subtask.status.equals("IN_PROGRESS")) {
-                setStatus("IN_PROGRESS");
+            if (subtask.status == Status.IN_PROGRESS) {
+                setStatus(Status.IN_PROGRESS);
                 progressCount++;
-            } else if (subtask.status.equals("DONE") && subtask.status != null) {
-                setStatus("IN_PROGRESS");
+            } else if (subtask.status == Status.DONE) {
+                setStatus(Status.IN_PROGRESS);
                 doneCount++;
             }
 
         }
         if (progressCount == subtasks.size()) {
-            setStatus("IN_PROGRESS");
+            setStatus(Status.IN_PROGRESS);
         }
         if (doneCount == subtasks.size()) {
-            setStatus("DONE");
+            setStatus(Status.DONE);
         }
     }
 
@@ -47,3 +49,5 @@ public class Epic extends Task {
                 + status + "'}\n";
     }
 }
+
+
