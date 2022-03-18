@@ -5,17 +5,30 @@ import manager.Status;
 import java.util.Objects;
 
 public class Task {
-    protected String Title;
+    protected String title;
     protected String description;
     protected Status status;
     protected Integer uniqueId;
+    private static Integer count = 0;//Поле для передачи значения уникального модификатора
 
-    public Task(String Title, String description) {
-        this.Title = Title;
+    public Task(String title, String description) {
+        this.title = title;
         this.description = description;
         this.status = Status.NEW;
-        this.uniqueId = InMemoryTaskManager.getCount();
-        InMemoryTaskManager.setCount();
+        this.uniqueId = Task.getCount();
+        Task.setCount();
+    }
+
+    public static Integer getCount() {
+        return count;
+    }
+
+    public static void setCount() {
+        Task.count++;
+    }
+
+    public static void setCount(Integer number) {
+        count = number;
     }
 
     public Integer getUniqueId() {
@@ -32,7 +45,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "{Тип задачи: tasks.Task" + ", Название задачи: '" + Title + "', Описание задачи: '" + description
+        return "{Тип задачи: tasks.Task" + ", Название задачи: '" + title + "', Описание задачи: '" + description
                 + "', Идентификатор задачи: " + this.uniqueId + ", Статус задачи: '" + status + "'\n";
     }
 
@@ -41,12 +54,12 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Title.equals(task.Title) && description.equals(task.description) && status.equals(task.status)
+        return title.equals(task.title) && description.equals(task.description) && status.equals(task.status)
                 && uniqueId.equals(task.uniqueId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Title, description, status, uniqueId);
+        return Objects.hash(title, description, status, uniqueId);
     }
 }

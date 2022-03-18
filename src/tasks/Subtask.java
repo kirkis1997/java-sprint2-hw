@@ -3,8 +3,8 @@ package tasks;
 public class Subtask extends Task {
     private Integer epicId;
 
-    public Subtask(String Title, String description, Integer epicId) {
-        super(Title, description);
+    public Subtask(String title, String description, Integer epicId) {
+        super(title, description);
         this.epicId = epicId;
     }
 
@@ -15,7 +15,7 @@ public class Subtask extends Task {
     @Override
     public String toString() {
         return "{Тип задачи: tasks.Subtask," + " Находится в эпике с идентификатором: '" + epicId + "', Название задачи: "
-                + Title + "' Описание задачи: '"
+                + title + "' Описание задачи: '"
                 + description + "', Идентификатор задачи: " + this.uniqueId + ", Статус задачи: '"
                 + status + "'}\n";
     }

@@ -7,8 +7,8 @@ import java.util.HashMap;
 public class Epic extends Task {
     private HashMap<Integer, Subtask> subtasks;//Уникальный список подзадач каждого эпика
 
-    public Epic(String Title, String description) {
-        super(Title, description);
+    public Epic(String title, String description) {
+        super(title, description);
         this.subtasks = new HashMap<>();
     }
 
@@ -44,7 +44,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "{Тип задачи: tasks.Epic" + ", Название задачи: '" + Title + "', Описание задачи: '"
+        return "{Тип задачи: tasks.Epic" + ", Название задачи: '" + title + "', Описание задачи: '"
                 + description + "', Идентификатор задачи: " + this.uniqueId + ", Статус задачи: '"
                 + status + "'}\n";
     }

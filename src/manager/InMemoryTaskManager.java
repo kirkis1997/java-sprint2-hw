@@ -1,107 +1,96 @@
 package manager;
 
 import manager.interfaces.TaskManager;
-import tasks.Epic;
-import tasks.Subtask;
-import tasks.Task;
+import tasks.*;
 
 import java.util.HashMap;
 
 public class InMemoryTaskManager extends Managers implements TaskManager {
-    private static InMemoryTaskManager instance;
+    private final HashMap<Integer, Task> allTasks = new HashMap<>();//HashMap для списка всех задач
+    //private static InMemoryTaskManager instance;
+    InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
-    private static Integer count = 0;//Поле для передачи значения уникального модификатора
-    private final HashMap<Integer, Object> taskMap = new HashMap<>();// HashMap для хранения всех видов задач
-    private final HashMap<Integer, Task> allTasks = new HashMap<>();//HashMap для tasks.Task
-    private final HashMap<Integer, Subtask> allSubtasks = new HashMap<>();//HashMap для tasks.Subtask
-    private final HashMap<Integer, Epic> allEpics = new HashMap<>();//HashMap для tasks.Epic
 
-    public static InMemoryTaskManager getInstance() {
+    /*public static InMemoryTaskManager getInstance() {
         if (instance == null) {
             instance = new InMemoryTaskManager();
         }
         return instance;
-    }
-
-    public static Integer getCount() {
-        return count;
-    }
-
-    public static void setCount() {
-        InMemoryTaskManager.count++;
-    }
+    }*/
 
     @Override
-    public Object getAllTasks() {//Вывести все задачи
-        taskMap.put(0, allTasks);
-        taskMap.put(1, allEpics);
-        taskMap.put(2, allSubtasks);
-
-        return taskMap;
-
+    public HashMap<Integer, Task> getAllTasks() {//Вывести все задачи
+        return allTasks;
     }
 
     @Override
     public void removeAllTasks() {//Очисить список задач
         allTasks.clear();
-        allEpics.clear();
-        allSubtasks.clear();
-        taskMap.clear();
-        count = 0;
+        Task.setCount(0);
     }
 
     @Override
-    public Object getTaskById(Integer id) {//Получить задачу по идентификатору
-        Object object = null;
-        int i = 10;
+    public Task getTaskById(Integer id) {//Получить задачу по идентификатору
+        Task task = null;
         if (allTasks.get(id) != null) {
-            object = allTasks.get(id);
-            getDefaultHistory().add((Task) object);
-        } else if (allSubtasks.get(id) != null) {
-            object = allSubtasks.get(id);
-            getDefaultHistory().add((Subtask) object);
-        } else if (allEpics.get(id) != null) {
-            object = (Epic) allEpics.get(id);
-            getDefaultHistory().add((Epic) object);
+            task = allTasks.get(id);
+            historyManager.add(task);
+
+
         }
-
-
-        return object;
+        return task;
     }
 
     //Переопределить и перегрузить метод создания новых задач для каждого их типа
+    //
+
+
+
     @Override
     public void createNewTask(Task task) {//Создание новой задачи
         allTasks.put(task.getUniqueId(), task);
     }
 
     @Override
-    public void createNewTask(Subtask subtask) {//Создание новой задачи
-        allSubtasks.put(subtask.getUniqueId(), subtask);
+    public void createNewSubtask(Subtask subtask) {//Создание новой задачи
+        allTasks.put(subtask.getUniqueId(), subtask);
     }
 
     @Override
-    public void createNewTask(Epic epic) {//Создание новой задачи
-        allEpics.put(epic.getUniqueId(), epic);
+    public void createNewEpic(Epic epic) {//Создание новой задачи
+        allTasks.put(epic.getUniqueId(), epic);
     }
 
 
     @Override
     public void updateTask(Integer id, Task task, Status status) {//Обновление задач
-        allTasks.put(id, task);
-        task.setStatus(status);
+        if (getTaskById(id) instanceof Task) {
+            allTasks.put(id, task);//Обновляем задачу с помощью передачи нового объекта, который заменяет старый
+            task.setStatus(status);//Обновляем статус вручную, т.к. по умолчанию стоит статус Status.NEW
+        }
+        
 
     }
 
     @Override
-    public void updateTask(Integer id, Subtask subtask, Status status) {//Обновление подзадач
-        allSubtasks.put(id, subtask);
-        ((Epic) getTaskById(subtask.getEpicId())).setSubtasks(subtask);//Добавить измененный объект подзадачи в список
-        //подзадач текущего эпика
-        subtask.setStatus(status);
-        allEpics.get(subtask.getEpicId()).setEpicStatus();//Получить объект tasks.Epic с обновленным статусом
-        allEpics.put(subtask.getEpicId(), allEpics.get(subtask.getEpicId()));//Поместить этот объект в allEpics
+    public void updateSubtask(Integer id, Subtask subtask, Status status) {//Обновить подзадачу
+        if (getTaskById(id) instanceof Subtask) {
+            allTasks.put(id, subtask);
+            subtask.setStatus(status);
+            Epic epic = (Epic)getTaskById(subtask.getEpicId());//Получить эпик, в котором находится эта подзадача
+            epic.setSubtasks(subtask);//Добавить измененный объект подзадачи в список подзадач текущего эпика
+            epic.setEpicStatus();//Получить объект tasks.Epic с обновленным статусом
+            allTasks.put(epic.getUniqueId(), epic);//Поместить этот объект в allTasks
+        }
 
+
+    }
+
+    @Override
+    public void updateEpic(Integer id, Epic epic) {//Обновить эпик
+        if (getTaskById(id) instanceof  Epic) {
+            allTasks.put(id, epic);
+        }
     }
 
 
@@ -111,7 +100,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager {
     }
 
     @Override
-    public Object getAllSubtasks(Epic epic) {//Получить все подзадачи эпика
+    public HashMap<Integer, Subtask> getAllSubtasks(Epic epic) {//Получить все подзадачи эпика
         return epic.getSubtasks();
 
     }
