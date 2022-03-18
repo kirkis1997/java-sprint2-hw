@@ -22,18 +22,18 @@ public class Main {
         manager.createNewTask(subtask1);
         Subtask subtask2 = new Subtask("Купить картофель", "Для гарнира", epic.getUniqueId());
         manager.createNewTask(subtask2);
-        epic.setSubtasks(subtask);
-        epic.setSubtasks(subtask1);
-        epic.setSubtasks(subtask2);
+        epic.addSubtasks(subtask);
+        epic.addSubtasks(subtask1);
+        epic.addSubtasks(subtask2);
 
         Epic epic1 = new Epic("Купить электронику", "Чтобы было за что платить КУ");
         manager.createNewTask(epic1);
         Subtask subtask3 = new Subtask("Купить тостер", "Для тостов", epic1.getUniqueId());
         manager.createNewTask(subtask3);
-        epic1.setSubtasks(subtask3);
+        epic1.addSubtasks(subtask3);
         Subtask subtask4 = new Subtask("Купить чайник", "Варить пельмени", epic1.getUniqueId());
         manager.createNewTask(subtask4);
-        epic1.setSubtasks(subtask4);
+        epic1.addSubtasks(subtask4);
 
 
 

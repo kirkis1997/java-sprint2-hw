@@ -78,7 +78,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager {
             allTasks.put(id, subtask);
             subtask.setStatus(status);
             Epic epic = (Epic)getTaskById(subtask.getEpicId());//Получить эпик, в котором находится эта подзадача
-            epic.setSubtasks(subtask);//Добавить измененный объект подзадачи в список подзадач текущего эпика
+            epic.addSubtasks(subtask);//Добавить измененный объект подзадачи в список подзадач текущего эпика
             epic.setEpicStatus();//Получить объект tasks.Epic с обновленным статусом
             allTasks.put(epic.getUniqueId(), epic);//Поместить этот объект в allTasks
         }
