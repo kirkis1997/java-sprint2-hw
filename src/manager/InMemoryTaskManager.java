@@ -1,22 +1,22 @@
 package manager;
 
+import manager.interfaces.HistoryManager;
 import manager.interfaces.TaskManager;
-import tasks.*;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.HashMap;
 
-public class InMemoryTaskManager extends Managers implements TaskManager {
+public class InMemoryTaskManager implements TaskManager {
+
+    private static Integer count = 0;//Поле для передачи значения уникального модификатора
     private final HashMap<Integer, Task> allTasks = new HashMap<>();//HashMap для списка всех задач
-    //private static InMemoryTaskManager instance;
-    InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+    HistoryManager historyManager = Managers.getDefaultHistory();
 
-
-    /*public static InMemoryTaskManager getInstance() {
-        if (instance == null) {
-            instance = new InMemoryTaskManager();
-        }
-        return instance;
-    }*/
+    public static Integer getCount() {
+        return count;
+    }
 
     @Override
     public HashMap<Integer, Task> getAllTasks() {//Вывести все задачи
@@ -26,7 +26,7 @@ public class InMemoryTaskManager extends Managers implements TaskManager {
     @Override
     public void removeAllTasks() {//Очисить список задач
         allTasks.clear();
-        Task.setCount(0);
+        count = 0;
     }
 
     @Override
@@ -45,54 +45,32 @@ public class InMemoryTaskManager extends Managers implements TaskManager {
     //
 
 
-
     @Override
     public void createNewTask(Task task) {//Создание новой задачи
-        allTasks.put(task.getUniqueId(), task);
-    }
-
-    @Override
-    public void createNewSubtask(Subtask subtask) {//Создание новой задачи
-        allTasks.put(subtask.getUniqueId(), subtask);
-    }
-
-    @Override
-    public void createNewEpic(Epic epic) {//Создание новой задачи
-        allTasks.put(epic.getUniqueId(), epic);
+        allTasks.put(count, task);
+        count++;
     }
 
 
     @Override
     public void updateTask(Integer id, Task task, Status status) {//Обновление задач
-        if (getTaskById(id) instanceof Task) {
+        if (getTaskById(id) instanceof Subtask) {
+            allTasks.put(id, task);
+            task.setStatus(status);
+            Subtask subtask = (Subtask) task;//Привести полученный объект к типу подзадача
+            Epic epic = (Epic) getTaskById(subtask.getEpicId());//Получить эпик, в котором находится эта подзадача
+            epic.addSubtasks(subtask);//Добавить измененный объект подзадачи в список подзадач текущего эпика
+            //для для вызова метода по обновлению эпика
+            epic.setEpicStatus();//Получить объект tasks.Epic с обновленным статусом
+        } else if (getTaskById(id) instanceof Epic) {
+            allTasks.put(id, task);//Если введенный объект является епиком, то обновляем все его поля, кроме статуса
+        } else {
             allTasks.put(id, task);//Обновляем задачу с помощью передачи нового объекта, который заменяет старый
             task.setStatus(status);//Обновляем статус вручную, т.к. по умолчанию стоит статус Status.NEW
         }
-        
-
-    }
-
-    @Override
-    public void updateSubtask(Integer id, Subtask subtask, Status status) {//Обновить подзадачу
-        if (getTaskById(id) instanceof Subtask) {
-            allTasks.put(id, subtask);
-            subtask.setStatus(status);
-            Epic epic = (Epic)getTaskById(subtask.getEpicId());//Получить эпик, в котором находится эта подзадача
-            epic.addSubtasks(subtask);//Добавить измененный объект подзадачи в список подзадач текущего эпика
-            epic.setEpicStatus();//Получить объект tasks.Epic с обновленным статусом
-            allTasks.put(epic.getUniqueId(), epic);//Поместить этот объект в allTasks
-        }
 
 
     }
-
-    @Override
-    public void updateEpic(Integer id, Epic epic) {//Обновить эпик
-        if (getTaskById(id) instanceof  Epic) {
-            allTasks.put(id, epic);
-        }
-    }
-
 
     @Override
     public void removeTaskById(Integer id) {//Удаление задачи по идентификатору

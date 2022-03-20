@@ -1,13 +1,14 @@
 package manager;
 
 import manager.interfaces.HistoryManager;
-import tasks.*;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private  ArrayList<Task> watchHistoryList = new ArrayList<>();// ArrayList для хранения списка просмотренных задач
+
+    private ArrayList<Task> watchHistoryList = new ArrayList<>();// ArrayList для хранения списка просмотренных задач
 
     @Override
     public void add(Task task) {
@@ -18,9 +19,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
 
-
     @Override
-    public List<Task> getHistory () {
+    public List<Task> getHistory() {
         return watchHistoryList;
     }
 

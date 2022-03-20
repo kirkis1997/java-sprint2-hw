@@ -5,6 +5,7 @@ import manager.Status;
 import java.util.HashMap;
 
 public class Epic extends Task {
+
     private HashMap<Integer, Subtask> subtasks;//Уникальный список подзадач каждого эпика
 
     public Epic(String title, String description) {

@@ -1,13 +1,13 @@
-import manager.InMemoryTaskManager;
-import manager.InMemoryHistoryManager;
-import manager.Status;
+
+import manager.*;
+import manager.interfaces.TaskManager;
 import tasks.*;
 
 
 public class Main {
     public static void main(String[] args) {
 
-        InMemoryTaskManager manager = new InMemoryTaskManager();
+        TaskManager manager = Managers.getDefault();
         Task task = new Task("Оплатить счет за КУ", "За два месяца");
         manager.createNewTask(task);
 
@@ -44,7 +44,7 @@ public class Main {
 
         }
 
-        manager.updateSubtask(3, subtask, Status.DONE);
+        manager.updateTask(3, subtask, Status.DONE);
 
         System.out.println(manager.getAllTasks());
     }

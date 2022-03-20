@@ -2,34 +2,23 @@ package tasks;
 
 import manager.InMemoryTaskManager;
 import manager.Status;
+
 import java.util.Objects;
 
 public class Task {
+
     protected String title;
     protected String description;
     protected Status status;
     protected Integer uniqueId;
-    private static Integer count = 0;//Поле для передачи значения уникального модификатора
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
         this.status = Status.NEW;
-        this.uniqueId = Task.getCount();
-        Task.setCount();
+        this.uniqueId = InMemoryTaskManager.getCount();
     }
 
-    public static Integer getCount() {
-        return count;
-    }
-
-    public static void setCount() {
-        Task.count++;
-    }
-
-    public static void setCount(Integer number) {
-        count = number;
-    }
 
     public Integer getUniqueId() {
         return uniqueId;
