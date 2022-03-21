@@ -2,6 +2,7 @@ package manager.interfaces;
 
 import manager.Status;
 import tasks.Epic;
+import tasks.Subtask;
 import tasks.Task;
 
 import java.util.HashMap;
@@ -20,5 +21,5 @@ public interface TaskManager {
 
     void removeTaskById(Integer id);
 
-    Object getAllSubtasks(Epic epic);
+    HashMap<Integer, Subtask> getAllSubtasks(Epic epic);
 }

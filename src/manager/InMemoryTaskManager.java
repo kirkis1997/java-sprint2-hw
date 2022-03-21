@@ -35,22 +35,15 @@ public class InMemoryTaskManager implements TaskManager {
         if (allTasks.get(id) != null) {
             task = allTasks.get(id);
             historyManager.add(task);
-
-
         }
         return task;
     }
-
-    //Переопределить и перегрузить метод создания новых задач для каждого их типа
-    //
-
 
     @Override
     public void createNewTask(Task task) {//Создание новой задачи
         allTasks.put(count, task);
         count++;
     }
-
 
     @Override
     public void updateTask(Integer id, Task task, Status status) {//Обновление задач
@@ -80,7 +73,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public HashMap<Integer, Subtask> getAllSubtasks(Epic epic) {//Получить все подзадачи эпика
         return epic.getSubtasks();
-
     }
 
 

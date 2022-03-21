@@ -35,8 +35,6 @@ public class Main {
         manager.createNewTask(subtask4);
         epic1.addSubtasks(subtask4);
 
-
-
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
                 manager.getTaskById(j);

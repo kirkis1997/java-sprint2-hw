@@ -19,7 +19,6 @@ public class Task {
         this.uniqueId = InMemoryTaskManager.getCount();
     }
 
-
     public Integer getUniqueId() {
         return uniqueId;
     }
