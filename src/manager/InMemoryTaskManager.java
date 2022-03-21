@@ -41,6 +41,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createNewTask(Task task) {//Создание новой задачи
+        if (task instanceof Subtask) {
+            Subtask subtask = (Subtask) task;//Привести полученный объект к типу подзадача
+            Epic epic = (Epic) getTaskById(subtask.getEpicId());//Получить эпик, в котором находится эта подзадача
+            epic.addSubtasks(subtask);//Добавить измененный объект подзадачи в список подзадач текущего эпика
+            //для для вызова метода по обновлению эпика
+            epic.setEpicStatus();//Получить объект tasks.Epic с обновленным статусом
+        }
         allTasks.put(count, task);
         count++;
     }

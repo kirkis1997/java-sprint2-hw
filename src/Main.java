@@ -21,19 +21,13 @@ public class Main {
         Subtask subtask1 = new Subtask("Купить мясо", "Для запекания в духовке", epic.getUniqueId());
         manager.createNewTask(subtask1);
         Subtask subtask2 = new Subtask("Купить картофель", "Для гарнира", epic.getUniqueId());
-        manager.createNewTask(subtask2);
-        epic.addSubtasks(subtask);
-        epic.addSubtasks(subtask1);
-        epic.addSubtasks(subtask2);
 
         Epic epic1 = new Epic("Купить электронику", "Чтобы было за что платить КУ");
         manager.createNewTask(epic1);
         Subtask subtask3 = new Subtask("Купить тостер", "Для тостов", epic1.getUniqueId());
         manager.createNewTask(subtask3);
-        epic1.addSubtasks(subtask3);
         Subtask subtask4 = new Subtask("Купить чайник", "Варить пельмени", epic1.getUniqueId());
         manager.createNewTask(subtask4);
-        epic1.addSubtasks(subtask4);
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
@@ -43,7 +37,11 @@ public class Main {
         }
 
         manager.updateTask(3, subtask, Status.DONE);
+        manager.updateTask(4, subtask1, Status.DONE);
+
+        manager.createNewTask(subtask2);
 
         System.out.println(manager.getAllTasks());
+
     }
 }
