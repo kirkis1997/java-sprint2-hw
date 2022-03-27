@@ -5,6 +5,8 @@ import manager.interfaces.TaskManager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
+import utility.Managers;
+import utility.Status;
 
 import java.util.HashMap;
 
@@ -12,7 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private static Integer count = 0;//Поле для передачи значения уникального модификатора
     private final HashMap<Integer, Task> allTasks = new HashMap<>();//HashMap для списка всех задач
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    public InMemoryHistoryManager historyManager =(InMemoryHistoryManager) Managers.getDefaultHistory();
 
     public static Integer getCount() {
         return count;
@@ -75,6 +77,13 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTaskById(Integer id) {//Удаление задачи по идентификатору
         allTasks.remove(id);
+        if (getTaskById(id) instanceof  Epic) {
+            Epic epic = (Epic) getTaskById(id);
+            for (Subtask subtask : epic.getSubtasks().values()) {
+                allTasks.remove(subtask.getEpicId());
+                historyManager.remove(subtask.getEpicId());
+            }
+        }
     }
 
     @Override

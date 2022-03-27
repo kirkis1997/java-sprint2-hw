@@ -1,7 +1,7 @@
 package tasks;
 
 import manager.InMemoryTaskManager;
-import manager.Status;
+import utility.Status;
 
 import java.util.Objects;
 

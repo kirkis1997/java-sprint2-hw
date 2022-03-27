@@ -1,6 +1,6 @@
 package manager.interfaces;
 
-import manager.Status;
+import utility.Status;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
