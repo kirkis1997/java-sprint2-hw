@@ -1,17 +1,19 @@
-
-import manager.InMemoryHistoryManager;
-import manager.InMemoryTaskManager;
-import manager.interfaces.HistoryManager;
 import manager.interfaces.TaskManager;
-import tasks.*;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 import utility.Managers;
-import utility.Status;
 
 
 public class Main {
     public static void main(String[] args) {
 
-        TaskManager manager = (InMemoryTaskManager) Managers.getDefault();
+        TaskManager manager = Managers.getDefault();
+
+        /**
+         * Создать две простые задачи, эпик с тремя подзадачами и пустой эпик
+         */
+
         Task task = new Task("Оплатить счет за КУ", "За два месяца");
         manager.createNewTask(task);
 
@@ -28,25 +30,39 @@ public class Main {
 
         Epic epic1 = new Epic("Купить электронику", "Чтобы было за что платить КУ");
         manager.createNewTask(epic1);
-        Subtask subtask3 = new Subtask("Купить тостер", "Для тостов", epic1.getUniqueId());
-        manager.createNewTask(subtask3);
-        Subtask subtask4 = new Subtask("Купить чайник", "Варить пельмени", epic1.getUniqueId());
-        manager.createNewTask(subtask4);
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                manager.getTaskById(j);
-            }
-
-        }
-
-        manager.updateTask(3, subtask, Status.DONE);
-        manager.updateTask(4, subtask1, Status.DONE);
-
-        manager.createNewTask(subtask2);
 
 
-        System.out.println(((InMemoryTaskManager) manager).historyManager.getHistory());
+        /**
+         * Тест
+         * Запросить созданные задачи несколько раз в произвольном порядке
+         */
 
+        manager.getTaskById(0);
+        System.out.println(manager.history());
+        manager.getTaskById(1);
+        System.out.println(manager.history());
+        manager.getTaskById(2);
+        System.out.println(manager.history());
+        manager.getTaskById(1);
+        System.out.println(manager.history());
+        manager.getTaskById(2);
+        System.out.println(manager.history());
+        manager.getTaskById(3);
+        System.out.println(manager.history());
+        manager.getTaskById(4);
+        System.out.println(manager.history());
+        manager.getTaskById(5);
+        System.out.println(manager.history());
+        manager.getTaskById(2);
+        System.out.println(manager.history());
+        manager.getTaskById(4);
+        System.out.println(manager.history());
+
+        manager.removeTaskById(0);//Удалить задачу из списка задач
+        System.out.println(manager.history());
+
+        manager.removeTaskById(2);//Удалить эпик из списка задач
+        System.out.println(manager.getAllTasks());
+        System.out.println(manager.history());
     }
 }

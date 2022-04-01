@@ -19,25 +19,27 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void remove(int id) {
+    public void add(Task task) {//Добавить новый элемент в лист просмотров
+        if (historyLinks.containsKey(task.getUniqueId())) {//Проверить задачу в HashMap
+            remove(task.getUniqueId());//Удалить Node из двусвязного списка
+        }
+        historyList.linkLast(task);
+        historyLinks.put(task.getUniqueId(), historyList.tail);
+    }
+    
+    @Override
+    public void remove(int id) {//Удалить элемент из листа просмотров
         Node<Task> node = historyLinks.get(id);
 
         if (node != null) {
             historyList.removeNode(node);
+            historyLinks.remove(id);
         }
-        historyLinks.remove(id);
+
     }
 
     @Override
-    public void add(Task task) {//Добавить новый элемент в лист просмотров
-        if (historyLinks.containsKey(task.getUniqueId())) {
-            remove(task.getUniqueId());
-        }
-        historyLinks.put(task.getUniqueId(), historyList.linkLast(task));
-    }
-
-    @Override
-    public List<Task> getHistory() {
+    public List<Task> getHistory() {//Получить историю просмотров
         return historyList.getTasks();
     }
 
@@ -45,36 +47,47 @@ public class InMemoryHistoryManager implements HistoryManager {
      * Создать собственный двусвязный список
      * в соответствии с ТЗ
      */
+
     public class HandMadeLinkedList<T> {
 
         private Node<T> head;//Головной элемент списка
         private Node<T> tail;//Хвостовой элемент списка
         private int size = 0;//Размер списка
 
-        public void removeNode(Node<T> element) {// Уалить узел связного списка
+        public void removeNode(Node<T> element) {// Удалить узел двусвязного списка
             Node<T> next = element.next;
             Node<T> prev = element.prev;
 
-            if (prev == null) {
-                head = next;
+            if (element == head) {
+                head = element.next;
             }
-            else if (next == null) {
-                tail = prev;
+            else {
+                element.prev.next = element.next;
+            }
+
+            if (element == tail) {
+                tail = element.prev;
+            }
+            else {
+                element.next.prev = element.prev;
             }
 
             element.data = null;
+
             size--;
 
         }
 
         public Node<T> linkLast(T element) {//Добавить элемент в хвост списка
+
             Node<T> oldTail = tail;
-            Node<T> newNode = new Node<T>(oldTail, (Node<T>) element, null);
+            Node<T> newNode = new Node<T>(oldTail, element, null);
             tail = newNode;
 
-            if (oldTail == null) {
+            if (historyLinks.isEmpty()) {//Если список пуст, для head присвоить значение нового элемента
                 head = newNode;
-            } else {
+            }
+            else {
                 oldTail.next = newNode;
             }
             size++;
@@ -93,6 +106,11 @@ public class InMemoryHistoryManager implements HistoryManager {
             return tasksList;
 
         }
+
+        public boolean isEmpty() {
+            return size == 0;
+        }
+
     }
 }
 
