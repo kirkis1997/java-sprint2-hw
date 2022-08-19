@@ -8,6 +8,7 @@ import tasks.Task;
 import utility.Managers;
 import utility.Status;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class InMemoryTaskManager implements TaskManager {
     }//Получить список всех задач
 
     @Override
-    public void removeAllTasks() {//Очистить список задач
+    public void removeAllTasks() throws IOException {//Очистить список задач
         allTasks.clear();
         count = 0;
     }
@@ -50,7 +51,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createNewTask(Task task) {//Создание новой задачи
+    public void createNewTask(Task task) throws IOException {//Создание новой задачи
         if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;//Привести полученный объект к типу подзадача
             Epic epic = (Epic) allTasks.get(subtask.getEpicId());//Получить эпик, в котором находится эта подзадача
@@ -63,7 +64,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Integer id, Task task, Status status) {//Обновление задач
+    public void updateTask(Integer id, Task task, Status status) throws IOException {//Обновление задач
         if (allTasks.get(id) instanceof Subtask) {
             allTasks.put(id, task);
             task.setStatus(status);
@@ -81,7 +82,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeTaskById(Integer id) {//Удаление задачи по идентификатору
+    public void removeTaskById(Integer id) throws IOException {//Удаление задачи по идентификатору
         historyManager.remove(id);
 
         if (allTasks.get(id) instanceof Epic) {

@@ -2,6 +2,7 @@ package tasks;
 
 import manager.InMemoryTaskManager;
 import utility.Status;
+import utility.TaskTypes;
 
 import java.util.Objects;
 
@@ -19,6 +20,17 @@ public class Task {
         this.uniqueId = InMemoryTaskManager.getCount();
     }
 
+    public Task(String title, String description, Status status, Integer uniqueId) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.uniqueId = uniqueId;
+    }
+
+    public void setUniqueId(Integer id) {
+        this.uniqueId = id;
+    }
+
     public Integer getUniqueId() {
         return uniqueId;
     }
@@ -32,9 +44,9 @@ public class Task {
     }
 
     @Override
-    public String toString() {
-        return "{Тип задачи: tasks.Task" + ", Название задачи: '" + title + "', Описание задачи: '" + description
-                + "', Идентификатор задачи: " + this.uniqueId + ", Статус задачи: '" + status + "'\n";
+    public String toString() {//Напишите метод сохранения задачи в строку String toString(Task task)
+        return String.format("%d,%s,%s,%s,%s,", uniqueId, TaskTypes.TASK,
+                title, description, status.toString());
     }
 
     @Override

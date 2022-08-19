@@ -3,8 +3,9 @@ package manager;
 import manager.interfaces.HistoryManager;
 import tasks.Task;
 import utility.Node;
-import java.util.HashMap;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -18,6 +19,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         this.historyList = new HandMadeLinkedList<>();
     }
 
+
     @Override
     public void add(Task task) {//Добавить новый элемент в лист просмотров
         if (historyLinks.containsKey(task.getUniqueId())) {//Проверить задачу в HashMap
@@ -26,7 +28,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         historyList.linkLast(task);
         historyLinks.put(task.getUniqueId(), historyList.tail);
     }
-    
+
     @Override
     public void remove(int id) {//Удалить элемент из листа просмотров
         Node<Task> node = historyLinks.get(id);
@@ -60,15 +62,13 @@ public class InMemoryHistoryManager implements HistoryManager {
 
             if (element == head) {
                 head = element.next;
-            }
-            else {
+            } else {
                 element.prev.next = element.next;
             }
 
             if (element == tail) {
                 tail = element.prev;
-            }
-            else {
+            } else {
                 element.next.prev = element.prev;
             }
 
@@ -86,8 +86,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
             if (historyLinks.isEmpty()) {//Если список пуст, для head присвоить значение нового элемента
                 head = newNode;
-            }
-            else {
+            } else {
                 oldTail.next = newNode;
             }
             size++;
