@@ -15,11 +15,11 @@ import java.util.List;
 public class InMemoryTaskManager implements TaskManager {
 
     private static Integer count = 0;//Поле для передачи значения уникального модификатора
-    private final HashMap<Integer, Task> allTasks = new HashMap<>();//HashMap для списка всех задач
+    private HashMap<Integer, Task> allTasks = new HashMap<>();//HashMap для списка всех задач
     private HistoryManager historyManager;
 
     public InMemoryTaskManager() {
-        this.historyManager  = Managers.getDefaultHistory();
+        this.historyManager = Managers.getDefaultHistory();
     }
 
     public HistoryManager getHistoryManager() {
@@ -42,7 +42,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(Integer id) {//Получить задачу по идентификатору
+    public Task getTaskById(Integer id) throws IOException {//Получить задачу по идентификатору
 
         Task task = allTasks.get(id);
         historyManager.add(task);

@@ -1,24 +1,16 @@
 import manager.FileBackedTasksManager;
 import manager.InMemoryTaskManager;
-import manager.interfaces.HistoryManager;
-import manager.interfaces.TaskManager;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
-import utility.Managers;
 
 import java.io.IOException;
-import java.util.Map;
 
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        FileBackedTasksManager manager = new FileBackedTasksManager();
-
-        /**
-         * Создать две простые задачи, эпик с тремя подзадачами и пустой эпик
-         */
+        InMemoryTaskManager manager = new InMemoryTaskManager();
 
         Task task = new Task("Оплатить счет за КУ", "За два месяца");
         manager.createNewTask(task);
@@ -37,11 +29,6 @@ public class Main {
         Epic epic1 = new Epic("Купить электронику", "Чтобы было за что платить КУ");
         manager.createNewTask(epic1);
 
-
-        /**
-         * Тест
-         * Запросить созданные задачи несколько раз в произвольном порядке
-         */
 
         manager.getTaskById(0);
         //System.out.println(manager.history());
@@ -62,16 +49,7 @@ public class Main {
         manager.getTaskById(2);
         //System.out.println(manager.history());
         manager.getTaskById(4);
-        //System.out.println(manager.history());
 
-        //manager.removeTaskById(0);//Удалить задачу из списка задач
-        //System.out.println(manager.history());
-
-        //manager.removeTaskById(2);//Удалить эпик из списка задач
-
-        //System.out.println(manager.history());
-
-        //System.out.println(manager.getAllTasks());
         manager.getTaskById(0);
         manager.getTaskById(1);
         //System.out.println(manager.getHistoryManager().getHistory());

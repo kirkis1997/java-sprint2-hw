@@ -15,7 +15,7 @@ public interface TaskManager {
 
     void removeAllTasks() throws IOException;
 
-    Task getTaskById(Integer id);
+    Task getTaskById(Integer id) throws IOException;
 
     void createNewTask(Task task) throws IOException;
 
