@@ -167,13 +167,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         for (int i = 0; i < lines.size(); i++) {
             if (lines.get(i).equals("id,type,name,status,description,epic")) {
-                manager.getAllTasks().put(fromStringToTask(lines.get(i + 1)).getUniqueId(), fromStringToTask(lines.get(i + 1)));
+                manager.getAllTasks().put(fromStringToTask(lines.get(i + 1)).getUniqueId(),
+                        fromStringToTask(lines.get(i + 1)));
                 i++;
             } else if (lines.get(i).isBlank()) {
                 manager.setHistoryList(fromStringToHistoryManager(lines.get(i + 1)));
                 break;
             } else
-                manager.getAllTasks().put(fromStringToTask(lines.get(i + 1)).getUniqueId(), fromStringToTask(lines.get(i)));
+                manager.getAllTasks().put(fromStringToTask(lines.get(i)).getUniqueId(),
+                        fromStringToTask(lines.get(i)));
         }
 
         fileReader.close();
@@ -199,8 +201,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         Subtask subtask1 = new Subtask("Купить мясо", "Для запекания в духовке", epic.getUniqueId());
         manager.createNewTask(subtask1);
 
-        /*Epic epic1 = new Epic("Купить электронику", "Чтобы было за что платить КУ");
-        manager.createNewTask(epic1);*/
+        Epic epic1 = new Epic("Купить электронику", "Чтобы было за что платить КУ");
+        manager.createNewTask(epic1);
 
         manager.getTaskById(0);
         manager.getTaskById(1);
@@ -217,7 +219,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.getTaskById(1);
 
 
-        /*FileBackedTasksManager newManager = loadFromFile(manager.getFile());//Создать новый
+        FileBackedTasksManager newManager = loadFromFile(manager.getFile());//Создать новый
         // FileBackedTasksManager из файла
 
         manager.getTaskById(1);
@@ -229,7 +231,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.getTaskById(1);
         manager.getTaskById(2);//Изменить историю просмотров
 
-*/
+
 
 
     }
