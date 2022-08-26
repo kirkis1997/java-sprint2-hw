@@ -27,11 +27,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return file;
     }
 
-    public static void setFile(File file) {
-        file = file;
-    }
-
-
     @Override
     public void createNewTask(Task task) throws IOException {
         super.createNewTask(task);
@@ -91,7 +86,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public void save() throws ManagerSaveException, IOException { //Метод сохранения данных в файл
 
-        Path file = Paths.get("C:\\Users\\kirki\\Desktop\\task.csv");
+        file = Paths.get("C:\\Users\\kirki\\Desktop\\task.csv");
         if (Files.notExists(file)) {
             file = Files.createFile(Paths.get("C:\\Users\\kirki\\Desktop", "task.csv"));
         }
@@ -156,7 +151,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager manager = new FileBackedTasksManager();
 
 
-        Reader fileReader = new FileReader("C:\\Users\\kirki\\Desktop\\task.csv");
+        Reader fileReader = new FileReader(file.toFile());
 
         Scanner scan = new Scanner(fileReader);
 
