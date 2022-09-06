@@ -19,10 +19,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private Path file;
 
-    public FileBackedTasksManager() throws IOException {
-        save();
-    }
-
     public Path getFile() {
         return file;
     }
@@ -31,11 +27,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void createNewTask(Task task) throws IOException {
         super.createNewTask(task);
         save();
-    }
-
-    @Override
-    public HistoryManager getHistoryManager() {
-        return super.getHistoryManager();
     }
 
     public void setHistoryList(List<Integer> list) {
@@ -79,21 +70,22 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return super.getAllSubtasks(epic);
     }
 
-    @Override
-    public List<Task> history() {
-        return super.history();
-    }
+    public void save() { //Метод сохранения данных в файл
 
-    public void save() throws ManagerSaveException, IOException { //Метод сохранения данных в файл
+        Path desktop = Paths.get(System.getProperty("user.home") + "\\Desktop\\task.csv");
 
-        file = Paths.get("C:\\Users\\kirki\\Desktop\\task.csv");
+        file = desktop;
+
+
         if (Files.notExists(file)) {
-            file = Files.createFile(Paths.get("C:\\Users\\kirki\\Desktop", "task.csv"));
+            try {
+                file = Files.createFile(desktop);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
-
         try (FileWriter fileWriter = new FileWriter(file.toFile(), false)) {
-
 
             fileWriter.write("id,type,name,status,description,epic\n");
 
@@ -101,6 +93,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
                 fileWriter.write(taskEntry.getValue() + "\n");
             }
+
             fileWriter.write("\n" + historyToString(getHistoryManager()));
 
 
@@ -111,8 +104,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     }
 
-    private String historyToString(HistoryManager manager) { /*Напишите статические методы static
-    String toString(HistoryManager manager)*/
+    private String historyToString(HistoryManager manager) {
 
         String tasksId = new String();
         int count = 1;
@@ -126,8 +118,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return tasksId;
     }
 
-    private static Task fromStringToTask(String value) { //Напишите метод создания задачи из строки
-        // Task fromString(String value)
+    private static Task fromStringToTask(String value) {
 
         String[] options = value.split(",");
 
@@ -146,36 +137,38 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return list;
     }
 
-    static FileBackedTasksManager loadFromFile(Path file) throws IOException {
+    public static FileBackedTasksManager loadFromFile(Path file) {
 
         FileBackedTasksManager manager = new FileBackedTasksManager();
 
+        try {
+            Reader fileReader = new FileReader(file.toFile());
 
-        Reader fileReader = new FileReader(file.toFile());
+            Scanner scan = new Scanner(fileReader);
 
-        Scanner scan = new Scanner(fileReader);
+            ArrayList<String> lines = new ArrayList<>();
+            while (scan.hasNextLine()) {
+                lines.add(scan.nextLine());
+            }
 
-        ArrayList<String> lines = new ArrayList<>();
-        while (scan.hasNextLine()) {
-            lines.add(scan.nextLine());
+            for (int i = 0; i < lines.size(); i++) {
+                if (lines.get(i).equals("id,type,name,status,description,epic")) {
+                    manager.getAllTasks().put(fromStringToTask(lines.get(i + 1)).getUniqueId(),
+                            fromStringToTask(lines.get(i + 1)));
+                    i++;
+                } else if (lines.get(i).isBlank()) {
+                    manager.setHistoryList(fromStringToHistoryManager(lines.get(i + 1)));
+                    break;
+                } else
+                    manager.getAllTasks().put(fromStringToTask(lines.get(i)).getUniqueId(),
+                            fromStringToTask(lines.get(i)));
+            }
+
+            fileReader.close();
+            scan.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        for (int i = 0; i < lines.size(); i++) {
-            if (lines.get(i).equals("id,type,name,status,description,epic")) {
-                manager.getAllTasks().put(fromStringToTask(lines.get(i + 1)).getUniqueId(),
-                        fromStringToTask(lines.get(i + 1)));
-                i++;
-            } else if (lines.get(i).isBlank()) {
-                manager.setHistoryList(fromStringToHistoryManager(lines.get(i + 1)));
-                break;
-            } else
-                manager.getAllTasks().put(fromStringToTask(lines.get(i)).getUniqueId(),
-                        fromStringToTask(lines.get(i)));
-        }
-
-        fileReader.close();
-        scan.close();
-
         return manager;
     }
 
@@ -225,9 +218,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.getTaskById(0);
         manager.getTaskById(1);
         manager.getTaskById(2);//Изменить историю просмотров
-
-
-
 
     }
 

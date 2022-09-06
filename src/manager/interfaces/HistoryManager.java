@@ -12,3 +12,5 @@ public interface HistoryManager {
 
     List<Task> getHistory();//Вернуть список просмотренных задач
 }
+
+
